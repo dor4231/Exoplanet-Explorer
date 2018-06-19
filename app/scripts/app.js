@@ -10,54 +10,59 @@ Instructions:
 // Inline configuration for jshint below. Prevents `gulp jshint` from failing with quiz starter code.
 /* jshint unused: false */
 
-(function(document) {
-  'use strict';
+(function (document) {
+    'use strict';
 
-  var home = null;
+    var home = null;
 
-  /**
-   * Helper function to show the search query.
-   * @param {String} query - The search query.
-   */
-  function addSearchHeader(query) {
-    home.innerHTML = '<h2 class="page-title">query: ' + query + '</h2>';
-  }
-
-  /**
-   * XHR wrapped in a Promise using Fetch.
-   * @param  {String} url - The URL to fetch.
-   * @return {Promise}    - A Promise that resolves when the XHR succeeds and fails otherwise.
-   */
-  function get(url) {
-    /*
-    Use the Fetch API to GET a URL.
-    Return the fetch.
-
-    Your code goes here!
+    /**
+     * Helper function to show the search query.
+     * @param {String} query - The search query.
      */
-  }
+    function addSearchHeader(query) {
+        home.innerHTML = '<h2 class="page-title">query: ' + query + '</h2>';
+    }
 
-  /**
-   * Performs an XHR for a JSON and returns a parsed JSON response.
-   * @param  {String} url - The JSON URL to fetch.
-   * @return {Promise}    - A promise that passes the parsed JSON response.
-   */
-  function getJSON(url) {
-    /*
-    Return a Promise that gets a URL and parses the JSON response. Use your get method!
-
-    Your code goes here!
+    /**
+     * XHR wrapped in a Promise using Fetch.
+     * @param  {String} url - The URL to fetch.
+     * @return {Promise}    - A Promise that resolves when the XHR succeeds and fails otherwise.
      */
-  }
+    function get(url) {
+        /*
+        Use the Fetch API to GET a URL.
+        Return the fetch.
+         */
+        return fetch(url)
+    }
 
-  window.addEventListener('WebComponentsReady', function() {
-    home = document.querySelector('section[data-route="home"]');
-    /*
-    Uncomment the next line when you're ready to test!
-    Don't forget to chain with a .then and a .catch!
-
-    Your code goes here too!
+    /**
+     * Performs an XHR for a JSON and returns a parsed JSON response.
+     * @param  {String} url - The JSON URL to fetch.
+     * @return {Promise}    - A promise that passes the parsed JSON response.
      */
-    // getJSON('../data/earth-like-results.json')
-  });
+    function getJSON(url) {
+        /*
+        Return a Promise that gets a URL and parses the JSON response. Use your get method!
+         */
+        return get(url).then(function(response) {
+                return response.json();
+            });
+    }
+
+    window.addEventListener('WebComponentsReady', function () {
+        home = document.querySelector('section[data-route="home"]');
+        /*
+        Uncomment the next line when you're ready to test!
+        Don't forget to chain with a .then and a .catch!
+         */
+        getJSON('../data/earth-like-results.json')
+            .then(function (response) {
+                addSearchHeader(response.query);
+            })
+            .catch(function (err) {
+                console.log(err);
+                addSearchHeader('unknown');
+            });
+    });
 })(document);
